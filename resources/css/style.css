@@ -27,6 +27,19 @@ header image {
   position: absolute;
 }
 
+/*Adjusted Story and title stylings */
+
+h2 {
+  font-weight: bold;
+  font-size: 30px;
+  font-family: Georgia;
+}
+
+p {
+  font-size: 17px;
+  font-family: Georgia;
+}
+
 .logo {
   display: inline-flex;
   flex-flow: row wrap;
@@ -41,7 +54,8 @@ header image {
 }
 
 /* Set's links black*/
-a  {
+
+a {
   color: black;
 }
 
@@ -49,102 +63,85 @@ a  {
   display: flex;
   position: relative;
   top: 70px;
-  border: solid 1px;
   justify-content: center;
   margin: 0px 15px;
 }
 
 .column1 {
   display: flex;
+  flex-shrink: 0;
   flex-flow: column wrap;
-  border: solid 1px;
   width: 630px;
   margin: 40px 30px 0px 0px;
 }
 
 .column2 {
   display: flex;
+  flex-shrink: 0;
   flex-flow: column wrap;
-  border: solid 1px;
   width: 300px;
   margin: 40px 30px 0px 0px;
 }
 
 .column3 {
   display: flex;
+  flex-shrink: 0;
   flex-flow: column wrap;
-  border: solid 1px;
   width: 240px;
   margin: 40px 30px 0px 0px;
 }
 
-.story1 {
-  border: solid 1px;
-}
-
-.story2 {
-  border: solid 1px;
-}
-
-.story3 {
-  border: solid 1px;
-}
-
-.story4 {
-  border: solid 1px;
-}
-
-.story5 {
-  border: solid 1px;
-}
-
-.newsBites {
-  border: solid 1px;
-}
-
 /* all image widths in column 1 had to be set to 630px.  height are all 300 Added div classes for each background image and set size*/
+
 .topImage {
   display: flex;
   background-image: url("../images/img-story-main.png");
   height: 300px;
   width: 630px;
   background-repeat: no-repeat;
+  align-items: center;
 }
 
+/*Added 15px margin top to all smaller pictures*/
+
 .secondImage {
+  margin-top: 15px;
   display: flex;
   background-image: url("../images/img-story-2.png");
   height: 300px;
-  width: 630px;
   justify-content: center;
+  align-items: center;
 }
 
 .thirdImage {
+  margin-top: 15px;
   display: flex;
   background-image: url("../images/img-story-3.png");
   height: 300px;
-  width: 630px;
   justify-content: center;
+  align-items: center;
 }
 
 .fourthImage {
+  margin-top: 15px;
   display: flex;
   background-image: url("../images/img-story-1.png");
   height: 300px;
-  width: 300px;
   justify-content: center;
+  align-items: center;
 }
 
 .topheadline {
   display: flex;
-  border: solid 1px;
   font-family: Georgia;
   font-weight: bold;
   font-size: 40px;
   color: white;
+  padding-left: 30px;
 }
 
 /*Subheadlines had to be made 10% smaller and centered.  The text inside also had to be center */
+
 .subheadline {
   display: flex;
   width: 90%;
@@ -156,7 +153,82 @@ a  {
   text-align: center;
 }
 
+.Stories {
+  display: inline-flex;
+  align-content: space-between;
+}
+
+.StoryGroup {
+  margin: 15px;
+}
+
+/*Set height of story blocks */
+
+.story2 {
+  height: 225px;
+}
+
+.story3 {
+  height: 225px;
+}
+
+.newsBites h3 {
+  text-align: center;
+}
+
+.newsBites {}
+
+h3 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 ul {
+  margin-top: 30px;
   list-style: none;
   padding: 0;
+}
+
+li {
+  border-bottom: solid 1px;
+  background-color: WhiteSmoke;
+  font-family: Verdana;
+  font-size: 12px;
+  color: DimGray;
+  padding: 18px;
+}
+
+/*Footer stylings below*/
+
+footer {
+  display: flex;
+  position: relative;
+  top: 70px;
+  height: 325px;
+  background-color: MediumAquamarine;
+  margin: auto;
+  font-family: Verdana;
+  font-size: 12px;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+footer a {
+  display: inline-flex;
+  margin: 0 20px;
+}
+
+.BottomLogo {
+  border-right-color: white;
+  border-right: solid 2px;
+  padding-right: 20px;
+  font-family: Georgia;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.FooterInfo {
+  margin-bottom: 20px;
 }
