@@ -14,8 +14,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up GitHub CLI
+        run: |
+          # Ensure the GitHub CLI is installed (this should already be available in GitHub Actions runners)
+          gh --version
+
       - name: Create PR from hotfix branch to master
         id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Set the GH_TOKEN environment variable for GitHub CLI authentication
         run: |
           HOTFIX_BRANCH="${GITHUB_REF#refs/heads/}"
           PR_TITLE="Merge hotfix/${HOTFIX_BRANCH} to master"
