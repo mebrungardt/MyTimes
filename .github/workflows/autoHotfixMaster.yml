@@ -1,0 +1,35 @@
+name: Auto PR for Hotfix to Master
+
+on:
+  push:
+    branches:
+      - '**'  # Trigger on pushes to any branch
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/hotfix/')  # Only trigger on hotfix branches
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create PR from hotfix branch to master
+        id: pr
+        run: |
+          HOTFIX_BRANCH="${GITHUB_REF#refs/heads/}"
+          PR_TITLE="Merge hotfix/${HOTFIX_BRANCH} to master"
+          PR_BODY="Automatically created PR to merge ${HOTFIX_BRANCH} into master."
+          
+          # Create the pull request using GitHub CLI
+          gh pr create \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY" \
+            --base master \
+            --head "$HOTFIX_BRANCH" \
+            --label "auto-pr" \
+            --repo ${{ github.repository }}
+
+      - name: Confirm PR creation
+        run: |
+          echo "PR created from hotfix branch to master."
