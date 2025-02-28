@@ -32,7 +32,7 @@ jobs:
         run: |
           TAG_COMMIT=${{ steps.tag-commit.outputs.commit }}
           BUG=${{ github.event.inputs.bug }}
-          BRANCH_NAME="hotfix/${{ github.event.inputs.tag }}/${BUG}"
+          BRANCH_NAME="test-hotfix/${{ github.event.inputs.tag }}/${BUG}"
           
           echo "Creating branch: $BRANCH_NAME from commit $TAG_COMMIT"
           
@@ -45,4 +45,4 @@ jobs:
           
       - name: Output created branch
         run: |
-          echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          echo "Created branch: test-hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
