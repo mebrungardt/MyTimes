@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (e.g., v1.2.3)'
+        description: 'Release tag (e.g., 1.2.3)'
         required: true
         type: string
       bug:
@@ -20,10 +20,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Fetch tags from remote
+        run: |
+          # Fetch all tags from the remote repository to ensure we have the correct ones
+          git fetch --tags
+
       - name: Get commit associated with the tag
         id: tag-commit
         run: |
-          # Fetch the tag commit
+          # Fetch the commit hash for the tag
           TAG_COMMIT=$(git rev-list -n 1 ${{ github.event.inputs.tag }})
           echo "Tag commit: $TAG_COMMIT"
           echo "::set-output name=commit::$TAG_COMMIT"
@@ -32,7 +37,7 @@ jobs:
         run: |
           TAG_COMMIT=${{ steps.tag-commit.outputs.commit }}
           BUG=${{ github.event.inputs.bug }}
-          BRANCH_NAME="test-hotfix/${{ github.event.inputs.tag }}/${BUG}"
+          BRANCH_NAME="hotfix/${{ github.event.inputs.tag }}/${BUG}"
           
           echo "Creating branch: $BRANCH_NAME from commit $TAG_COMMIT"
           
@@ -45,4 +50,4 @@ jobs:
           
       - name: Output created branch
         run: |
-          echo "Created branch: test-hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
