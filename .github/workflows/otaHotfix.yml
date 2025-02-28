@@ -1,0 +1,47 @@
+name: Create Hotfix Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., 1.2.3)'
+        required: true
+        type: string
+      bug:
+        description: 'Bug identifier (e.g., header-typo)'
+        required: true
+        type: string
+
+jobs:
+  create-hotfix-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get commit associated with the tag
+        id: tag-commit
+        run: |
+          # Fetch the tag commit
+          TAG_COMMIT=$(git rev-list -n 1 ${{ github.event.inputs.tag }})
+          echo "Tag commit: $TAG_COMMIT"
+          echo "::set-output name=commit::$TAG_COMMIT"
+
+      - name: Create a hotfix branch
+        run: |
+          TAG_COMMIT=${{ steps.tag-commit.outputs.commit }}
+          BUG=${{ github.event.inputs.bug }}
+          BRANCH_NAME="hotfix/${{ github.event.inputs.tag }}/${BUG}"
+          
+          echo "Creating branch: $BRANCH_NAME from commit $TAG_COMMIT"
+          
+          # Checkout the commit and create the new branch
+          git checkout $TAG_COMMIT
+          git checkout -b $BRANCH_NAME
+          
+          # Push the new branch to GitHub
+          git push origin $BRANCH_NAME
+          
+      - name: Output created branch
+        run: echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
