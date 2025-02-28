@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (e.g., 1.2.3)'
+        description: 'Release tag (e.g., v1.2.3)'
         required: true
         type: string
       bug:
-        description: 'Bug identifier (e.g., header-typo)'
+        description: 'Bug identifier (e.g., bug123)'
         required: true
         type: string
 
@@ -44,4 +44,5 @@ jobs:
           git push origin $BRANCH_NAME
           
       - name: Output created branch
-        run: echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+        run: |
+          echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
