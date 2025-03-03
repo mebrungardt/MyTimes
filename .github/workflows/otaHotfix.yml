@@ -34,6 +34,7 @@ jobs:
           echo "::set-output name=commit::$TAG_COMMIT"
 
       - name: Create a hotfix branch
+        id: hotfix-branch
         run: |
           TAG_COMMIT=${{ steps.tag-commit.outputs.commit }}
           BUG=${{ github.event.inputs.bug }}
@@ -49,6 +50,7 @@ jobs:
           git push origin $HOTFIX_BRANCH
 
       - name: Create an OTA branch from the hotfix branch
+        id: ota-branch
         run: |
           HOTFIX_BRANCH="hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
           OTA_BRANCH="ota/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
@@ -63,6 +65,9 @@ jobs:
           git push origin $OTA_BRANCH
 
       - name: Create a draft PR for OTA to Hotfix
+        id: draft-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Set the GH_TOKEN environment variable for GitHub CLI authentication
         run: |
           HOTFIX_BRANCH="hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
           OTA_BRANCH="ota/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
