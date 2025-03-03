@@ -1,4 +1,4 @@
-name: Create Hotfix Branch
+name: Create Hotfix and OTA Branches
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
         type: string
 
 jobs:
-  create-hotfix-branch:
+  create-branches-and-pr:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,17 +37,42 @@ jobs:
         run: |
           TAG_COMMIT=${{ steps.tag-commit.outputs.commit }}
           BUG=${{ github.event.inputs.bug }}
-          BRANCH_NAME="hotfix/${{ github.event.inputs.tag }}/${BUG}"
+          HOTFIX_BRANCH="hotfix/${{ github.event.inputs.tag }}/${BUG}"
           
-          echo "Creating branch: $BRANCH_NAME from commit $TAG_COMMIT"
+          echo "Creating hotfix branch: $HOTFIX_BRANCH from commit $TAG_COMMIT"
           
-          # Checkout the commit and create the new branch
+          # Checkout the commit and create the hotfix branch
           git checkout $TAG_COMMIT
-          git checkout -b $BRANCH_NAME
+          git checkout -b $HOTFIX_BRANCH
           
-          # Push the new branch to GitHub
-          git push origin $BRANCH_NAME
-          
-      - name: Output created branch
+          # Push the hotfix branch to GitHub
+          git push origin $HOTFIX_BRANCH
+
+      - name: Create an OTA branch from the hotfix branch
         run: |
-          echo "Created branch: hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          HOTFIX_BRANCH="hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          OTA_BRANCH="ota/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          
+          echo "Creating OTA branch: $OTA_BRANCH from hotfix branch $HOTFIX_BRANCH"
+          
+          # Checkout the hotfix branch and create the OTA branch
+          git checkout $HOTFIX_BRANCH
+          git checkout -b $OTA_BRANCH
+          
+          # Push the OTA branch to GitHub
+          git push origin $OTA_BRANCH
+
+      - name: Create a draft PR for OTA to Hotfix
+        run: |
+          HOTFIX_BRANCH="hotfix/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          OTA_BRANCH="ota/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          
+          echo "Creating draft PR from $OTA_BRANCH to $HOTFIX_BRANCH"
+          
+          # Create a draft pull request using GitHub CLI (gh)
+          gh pr create --base $HOTFIX_BRANCH --head $OTA_BRANCH --title "Draft PR for $OTA_BRANCH to $HOTFIX_BRANCH" --body "This is a draft PR to merge $OTA_BRANCH into $HOTFIX_BRANCH." --draft
+
+      - name: Output created branches and PR
+        run: |
+          echo "Created branches: $HOTFIX_BRANCH and $OTA_BRANCH"
+          echo "Draft PR created from $OTA_BRANCH to $HOTFIX_BRANCH"
