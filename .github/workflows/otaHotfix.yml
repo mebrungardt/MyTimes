@@ -64,6 +64,18 @@ jobs:
           # Push the OTA branch to GitHub
           git push origin $OTA_BRANCH
 
+      - name: Add an empty commit to OTA branch
+        id: empty-commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Set the GH_TOKEN environment variable for GitHub CLI authentication
+        run: |
+          OTA_BRANCH="ota/${{ github.event.inputs.tag }}/${{ github.event.inputs.bug }}"
+          
+          # Checkout OTA branch and create an empty commit
+          git checkout $OTA_BRANCH
+          git commit --allow-empty -m "Empty commit to allow draft PR creation"
+          git push origin $OTA_BRANCH
+
       - name: Create a draft PR for OTA to Hotfix
         id: draft-pr
         env:
